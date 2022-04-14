@@ -3,3 +3,4 @@
 *.sqlite3
 **/__pycache__
 **.log
+luffy_pc/node_modules
