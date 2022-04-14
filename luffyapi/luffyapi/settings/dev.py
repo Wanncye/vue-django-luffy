@@ -44,6 +44,12 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+# CORS组的配置信息
+CORS_ORIGIN_WHITELIST = (
+    'www.luffycity.cn:8080',
+)
+CORS_ALLOW_CREDENTIALS = False  # 允许ajax跨域请求时携带cookie
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
