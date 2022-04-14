@@ -4,6 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router/index'
 import setting from "./setting"
+import axios from 'axios'; // 从node_modules目录中导入包
+// 允许ajax发送请求时附带cookie
+axios.defaults.withCredentials = false;
+
+Vue.prototype.$axios = axios; // 把对象挂载vue中
+
 Vue.config.productionTip = false
 
 Vue.prototype.$settings = setting
