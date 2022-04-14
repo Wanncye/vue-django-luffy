@@ -23,6 +23,6 @@ def custom_exception_handle(exc, contex):
         view = contex["view"]
         if isinstance(exc, DatabaseError):
             logger.error('[%s] %s' % (view, exc))
-            reponse = Response({'message' : '服务器内部错误，请联系客服工作人员'}, status=status.HTTP_507_INSUFFICIENT_STORAGE)
+            response = Response({'message' : '服务器内部错误，请联系客服工作人员'}, status=status.HTTP_507_INSUFFICIENT_STORAGE)
 
-    return reponse
+    return response

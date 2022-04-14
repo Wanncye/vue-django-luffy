@@ -15,6 +15,9 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+#把apps目录下面所有的子应用设置为可以直接导包，那就需要把apps设置为默认导宝路径
+import sys
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -42,11 +45,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'corsheaders',
+    'rest_framework',
+
+    #子应用
+    'home'
 ]
 
 # CORS组的配置信息
 CORS_ORIGIN_WHITELIST = (
-    'www.luffycity.cn:8080',
+    'http://www.luffycity.cn:8080',
 )
 CORS_ALLOW_CREDENTIALS = False  # 允许ajax跨域请求时携带cookie
 
@@ -137,7 +144,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+# 访问静态文件的url地址前缀
 STATIC_URL = '/static/'
+# 设置django的静态文件目录
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR,"static")
+]
+
+# 项目中存储上传文件的根目录[暂时配置]，注意，uploads目录需要手动创建否则上传文件时报错
+MEDIA_ROOT=os.path.join(BASE_DIR,"uploads")
+# 访问上传文件的url地址前缀
+MEDIA_URL ="/media/"
+
+
 
 #日志配置
 LOGGING = {
@@ -188,5 +207,5 @@ LOGGING = {
 
 REST_FRAMEWORK = {
     #异常处理
-    'EXCEPTION_HANDLER': 'luffy.utils.exceptions.custom_exception_handle',
+    'EXCEPTION_HANDLER': 'luffyapi.utils.exceptions.custom_exception_handle',
 }
