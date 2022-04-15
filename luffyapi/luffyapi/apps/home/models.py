@@ -1,3 +1,4 @@
+from distutils.command.upload import upload
 from tabnanny import verbose
 from django.db import models
 
@@ -6,8 +7,9 @@ class Banner(models.Model):
     """轮播图模型"""
     #模型字段
     title = models.CharField(max_length=500, verbose_name="广告标题")
-    ling = models.CharField(max_length=500, verbose_name="广告链接")
-    iamge_url = models.CharField(max_length=255, verbose_name="图片")
+    link = models.CharField(max_length=500, verbose_name="广告链接")
+    #banner为上传文件的子目录
+    image_url = models.ImageField(upload_to="banner", null=True, blank=True, max_length=255, verbose_name="图片")
     remark = models.TextField(verbose_name="备注信息")
     is_show = models.BooleanField(default=False,verbose_name="是否显示")
     orders = models.IntegerField(default=1, verbose_name="排序")
@@ -21,4 +23,4 @@ class Banner(models.Model):
 
     #自定义方法【自定义字段或者自定义工具方法】
     def __str__(self):
-        return self.name
+        return self.title

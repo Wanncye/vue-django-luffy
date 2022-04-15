@@ -7,7 +7,8 @@ class BannerModelSerializer(serializers.ModelSerializer):
     #模型序列化器字段声明
     class Meta:
         model = Banner
-        fileds = ['image_url', 'link']
+        # fileds = '__all__'
+        fields = ['image_url', 'link']
 
     #验证方法
 
