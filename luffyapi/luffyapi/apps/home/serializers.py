@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Banner
+from .models import Nav
 class BannerModelSerializer(serializers.ModelSerializer):
     #字段声明
 
@@ -13,3 +14,8 @@ class BannerModelSerializer(serializers.ModelSerializer):
     #验证方法
 
     #存储数据方法
+
+class NavModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Nav
+        fields = ['title', 'link', 'is_site']
