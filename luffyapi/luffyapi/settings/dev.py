@@ -215,6 +215,16 @@ LOGGING = {
 REST_FRAMEWORK = {
     #异常处理
     'EXCEPTION_HANDLER': 'luffyapi.utils.exceptions.custom_exception_handle',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}
+
+import datetime
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
 }
 
 #注册自定义用户模型,值的格式必须是：应用名.模型类名
