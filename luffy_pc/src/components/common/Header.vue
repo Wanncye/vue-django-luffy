@@ -26,7 +26,7 @@
                     <el-menu-item index="2-1">我的账户</el-menu-item>
                     <el-menu-item index="2-2">我的订单</el-menu-item>
                     <el-menu-item index="2-3">我的优惠卷</el-menu-item>
-                    <el-menu-item index="2-3"><span>退出登录</span></el-menu-item>
+                    <el-menu-item index="2-3"><span @click="logoutHandler">退出登录</span></el-menu-item>
                   </el-submenu>
                 </el-menu>
             </div>
@@ -63,6 +63,16 @@
         this.get_nav();
       },
       methods:{
+        logoutHandler(){
+          //退出登录
+          localStorage.removeItem("user_token")
+          localStorage.removeItem("user_id")
+          localStorage.removeItem("user_name")
+          sessionStorage.removeItem("user_token")
+          sessionStorage.removeItem("user_id")
+          sessionStorage.removeItem("user_name")
+          this.check_user_login()
+        },
         check_user_login(){
           //获取用户的登录状态
           this.token = sessionStorage.user_token || localStorage.user_token

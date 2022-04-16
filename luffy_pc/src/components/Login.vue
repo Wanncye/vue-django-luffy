@@ -61,18 +61,18 @@ export default {
           //记住登录状态
           sessionStorage.removeItem("user_token")
           sessionStorage.removeItem("user_id")
-          sessionStorage.removeItem("username")
+          sessionStorage.removeItem("user_name")
           localStorage.user_token = response.data.token
           localStorage.user_id = response.data.id
-          localStorage.username = response.data.username
+          localStorage.user_name = response.data.username
         }else{
           //不记住登录状态
           localStorage.removeItem("user_token")
           localStorage.removeItem("user_id")
-          localStorage.removeItem("username")
+          localStorage.removeItem("user_name")
           sessionStorage.user_token = response.data.token
           sessionStorage.user_id = response.data.id
-          sessionStorage.username = response.data.username
+          sessionStorage.user_name = response.data.username
         }
         console.log(response.data)
         //页面跳转
