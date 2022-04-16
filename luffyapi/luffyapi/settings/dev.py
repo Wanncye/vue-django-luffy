@@ -224,7 +224,9 @@ REST_FRAMEWORK = {
 
 import datetime
 JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    #指明jwt有效时间
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=10),
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'users.utils.jwt_response_payload_handler',
 }
 
 #注册自定义用户模型,值的格式必须是：应用名.模型类名

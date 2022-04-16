@@ -17,12 +17,12 @@
 					<div id="geetest1"></div>
 					<div class="rember">
 						<p>
-							<input type="checkbox" class="no" name="a"/>
+							<input type="checkbox" class="no" name="a" v-model="remember"/>
 							<span>记住密码</span>
 						</p>
 						<p>忘记密码</p>
 					</div>
-					<button class="login_btn">登录</button>
+					<button class="login_btn" @click="loginHandler">登录</button>
 					<p class="go_login" >没有账号 <span>立即注册</span></p>
 				</div>
 				<div class="inp" v-show="login_type==1">
@@ -45,11 +45,46 @@ export default {
         login_type: 0,
         username:"",
         password:"",
+        remember:false,
     }
   },
 
   methods:{
-
+    loginHandler(){
+      this.$axios.post(`${this.$settings.HOST}/user/login/`, {
+        username: this.username,
+        password: this.password
+      }).then(response=>{
+        if(this.remember){
+          //记住登录状态
+          sessionStorage.removeItem("user_token")
+          sessionStorage.removeItem("user_id")
+          sessionStorage.removeItem("username")
+          localStorage.user_token = response.token
+          localStorage.user_id = response.id
+          localStorage.username = response.username
+        }else{
+          //不记住登录状态
+          localStorage.removeItem("user_token")
+          localStorage.removeItem("user_id")
+          localStorage.removeItem("username")
+          sessionStorage.user_token = response.token
+          sessionStorage.user_id = response.id
+          sessionStorage.username = response.username
+        }
+        console.log(response.data)
+        //页面跳转
+        let self = this
+        this.$alert("登录成功", "路飞学城", {
+          callback(){
+            self.$router.push("/")
+          }
+        })
+      }).catch(error=>{
+        this.$message.error("登录失败")
+        console.log(error.response)
+      })
+    }
   },
 
 };
