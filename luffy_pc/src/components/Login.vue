@@ -55,22 +55,24 @@ export default {
         username: this.username,
         password: this.password
       }).then(response=>{
+        console.log("test")
+        console.log(response.data.token)
         if(this.remember){
           //记住登录状态
           sessionStorage.removeItem("user_token")
           sessionStorage.removeItem("user_id")
           sessionStorage.removeItem("username")
-          localStorage.user_token = response.token
-          localStorage.user_id = response.id
-          localStorage.username = response.username
+          localStorage.user_token = response.data.token
+          localStorage.user_id = response.data.id
+          localStorage.username = response.data.username
         }else{
           //不记住登录状态
           localStorage.removeItem("user_token")
           localStorage.removeItem("user_id")
           localStorage.removeItem("username")
-          sessionStorage.user_token = response.token
-          sessionStorage.user_id = response.id
-          sessionStorage.username = response.username
+          sessionStorage.user_token = response.data.token
+          sessionStorage.user_id = response.data.id
+          sessionStorage.username = response.data.username
         }
         console.log(response.data)
         //页面跳转

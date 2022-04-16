@@ -231,3 +231,8 @@ JWT_AUTH = {
 
 #注册自定义用户模型,值的格式必须是：应用名.模型类名
 AUTH_USER_MODEL= 'users.User'
+
+#实现多条件判断登录
+AUTHENTICATION_BACKENDS = [
+    'users.utils.UsernameMobileAuthBackend',
+]
