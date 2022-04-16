@@ -5,7 +5,7 @@
 			<div class="register_box">
                 <div class="register-title">注册路飞学城</div>
 				<div class="inp">
-					<input v-model = "mobile" type="text" placeholder="手机号码" class="user">
+					<input v-model = "mobile" type="text" placeholder="手机号码" class="user" @blur="checkMobile">
                     <input v-model = "password" type="password" placeholder="登录密码" class="user">
 					<input v-model = "sms_code" type="text" placeholder="输入验证码" class="user">
 					<button class="register_btn" @click="registerHandler">注册</button>
@@ -30,6 +30,13 @@ export default {
   created(){
   },
   methods:{
+      checkMobile(){
+          // 检查手机号的合法性[格式和是否已经注册]
+          this.$axios.get(`${this.$settings.HOST}/user/mobile/${this.mobile}/`).catch(error=>{
+              console.log(error.response.data.message)
+              this.$message.error(error.response.data.message);
+          });
+      },
       registerHandler(){
           //用户注册
         this.$axios.post(`${this.$settings.HOST}/user/reg/`,{
