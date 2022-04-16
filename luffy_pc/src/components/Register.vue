@@ -6,9 +6,9 @@
                 <div class="register-title">注册路飞学城</div>
 				<div class="inp">
 					<input v-model = "mobile" type="text" placeholder="手机号码" class="user">
-					<div id="geetest"></div>
-					<input v-model = "sms" type="text" placeholder="输入验证码" class="user">
-					<button class="register_btn" >注册</button>
+                    <input v-model = "password" type="password" placeholder="登录密码" class="user">
+					<input v-model = "sms_code" type="text" placeholder="输入验证码" class="user">
+					<button class="register_btn" @click="registerHandler">注册</button>
 					<p class="go_login" >已有账号 <router-link to="/user/login">直接登录</router-link></p>
 				</div>
 			</div>
@@ -21,14 +21,47 @@ export default {
   name: 'Register',
   data(){
     return {
-        sms:"",
+        sms_code:"",
         mobile:"",
         validateResult:false,
+        password:"",
     }
   },
   created(){
   },
-  methods:{},
+  methods:{
+      registerHandler(){
+          //用户注册
+        this.$axios.post(`${this.$settings.HOST}/user/reg/`,{
+            mobile: this.mobile,
+            sms_code: this.sms_code,
+            password: this.password
+        }).then(response=>{
+            console.log(response.data)
+            localStorage.removeItem("user_token")
+            localStorage.removeItem("user_id")
+            localStorage.removeItem("user_name")
+            sessionStorage.user_token = response.data.token
+            sessionStorage.user_id = response.data.id
+            sessionStorage.user_name = response.data.username
+
+            // 页面跳转
+            let self = this
+            this.$alert("注册成功!","路飞学城",{
+               callback(){
+                    self.$router.push("/")
+               }
+            })
+        }).catch(error=>{
+            let data = error.response.data
+            let message = ""
+            for(let key in data){
+                message = data[key][0];
+            }
+            this.$message.error(message)
+        })
+      }
+  },
 
 };
 </script>
