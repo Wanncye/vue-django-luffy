@@ -41,9 +41,12 @@ class SMSAPIView(APIView):
         #2.. 生成短信验证码
         sms_code = "%06d" % random.randint(100000,999999)
 
-        #3. 保存验证码到redis
-        redis_conn.setex("sms_%s" % mobile, constants.SMS_EXPIRE_TIME, sms_code)
-        redis_conn.setex("mobile_%s" % mobile, constants.SMS_INTERVAL, "_")
+        #3. 保存验证码到redis【使用事务把多条命令集中发送给redis，只要一条sql失败，回滚】
+        pipe = redis_conn.pipeline()
+        pipe.multi()
+        pipe.setex("sms_%s" % mobile, constants.SMS_EXPIRE_TIME, sms_code)
+        pipe.setex("mobile_%s" % mobile, constants.SMS_INTERVAL, "_")
+        pipe.execute()
 
         #4. 调用短信sdk接口，发送短信
         try:

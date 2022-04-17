@@ -46,7 +46,7 @@ class UserModelSerializer(serializers.ModelSerializer):
         redis_conn.delete("sms_%s" % mobile)
         if real_sms_code.decode() != sms_code:
             redis_conn.delete("sms_%s" % mobile)
-            raise serializers.ValidationError("对不起，短信验证码错误！")
+            raise serializers.ValidationError("对不起，短信验证码错误！本次验证码已失效，请重新发送！")
         return attrs
 
     def create(self, validated_data):
