@@ -55,7 +55,8 @@ INSTALLED_APPS = [
 
     #子应用
     'home',
-    'users'
+    'users',
+    'course',
 ]
 
 # CORS组的配置信息
