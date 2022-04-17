@@ -115,6 +115,66 @@ DATABASES = {
 }
 
 
+#短信token：3106d9d45fe948b8b558362606043c16
+# 设置redis缓存
+CACHES = {
+    # 默认缓存
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        # 项目上线时,需要调整这里的路径
+        "LOCATION": "redis://127.0.0.1:6379/0",
+
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+    # 提供给xadmin或者admin的session存储
+    "session": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+    # 提供存储短信验证码
+    "sms_code":{
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/2",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# 设置xadmin用户登录时,登录信息session保存到redis
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "session"
+
+
+# 短信接口配置
+SMS = {
+    # 说明：主账号，登陆云通讯网站后，可在"控制台-应用"中看到开发者主账号ACCOUNT SID
+    "_accountSid" : '8a216da8802d68fe0180358b8b5c0145',
+
+    # 说明：主账号Token，登陆云通讯网站后，可在控制台-应用中看到开发者主账号AUTH TOKEN
+    "_accountToken" : '3106d9d45fe948b8b558362606043c16',
+
+    # 请使用管理控制台首页的APPID或自己创建应用的APPID
+    "_appId" : '8a216da8802d68fe0180358b8cfd014c',
+
+    # 说明：请求地址，生产环境配置成app.cloopen.com
+    # 沙箱环境地址： sandboxapp.cloopen.com
+    "_serverIP" : 'sandboxapp.cloopen.com',
+
+    # 请求端口 ，生产环境为8883，沙箱环境也是这个
+    "_serverPort":"8883",
+    
+    # REST API版本号
+    "_softVersion": '2013-12-26',
+}
+
+
+
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
