@@ -50,13 +50,16 @@ class SMSAPIView(APIView):
 
         #4. 调用短信sdk接口，发送短信
         try:
+            from mycelery.sms.tasks import send_sms
+            send_sms.delay()
+
             ccp = CCP()
             ret = ccp.send_template_sms(mobile, [sms_code, constants.SMS_EXPIRE_TIME//60], constants.SMS_TEMPLATE_ID)
             if not ret:
                 log.error("用户注册短信发送失败！手机号：%s" % mobile)
-                return Response({"message" : "发送短信失败"},status=status.HTTP_500_BAD_REQUEST)
+                return Response({"message" : "发送短信失败"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except:
-            return Response({"message" : "发送短信失败"},status=status.HTTP_500_BAD_REQUEST)
+            return Response({"message" : "发送短信失败"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         #5. 相应发送短信的结果
         return  Response({"message" : "发送短信成功"})
