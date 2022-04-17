@@ -3,6 +3,7 @@ from .models import User
 import re
 from .utils import get_user_by_account
 from django.contrib.auth.hashers import make_password
+from django_redis import get_redis_connection
 class UserModelSerializer(serializers.ModelSerializer):
     sms_code = serializers.CharField(min_length=4, max_length=6, required=True, write_only=True, help_text="短信验证码")
     token = serializers.CharField(max_length=1024, read_only=True, help_text="token认证字符串")
@@ -37,8 +38,15 @@ class UserModelSerializer(serializers.ModelSerializer):
         if ret is not None:
             raise serializers.ValidationError("对不起，手机已经被注册")
 
-        # todo 验证短信验证码是否正确
+        # 验证短信验证码是否正确
+        redis_conn = get_redis_connection("sms_code")
+        real_sms_code = redis_conn.get("sms_%s" % mobile)
 
+        # 本次验证之后直接删除redis中的验证码，防止暴力破解
+        redis_conn.delete("sms_%s" % mobile)
+        if real_sms_code.decode() != sms_code:
+            redis_conn.delete("sms_%s" % mobile)
+            raise serializers.ValidationError("对不起，短信验证码错误！")
         return attrs
 
     def create(self, validated_data):

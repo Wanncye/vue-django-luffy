@@ -27,6 +27,8 @@ class MobileAPIView(APIView):
 import random
 from django_redis import get_redis_connection
 from luffyapi.libs.yuntongxun.sms import CCP
+import logging
+log = logging.getLogger("django")
 class SMSAPIView(APIView):
     def get(self, request, mobile):
         """短信发送接口"""
@@ -34,10 +36,10 @@ class SMSAPIView(APIView):
         redis_conn = get_redis_connection("sms_code")
         ret = redis_conn.get("mobile_%s" % mobile)
         if ret is not None:
-            return Response({"message" : "对不起，短信60秒内已经发送，请耐心等待"})
+            return Response({"message" : "对不起，短信60秒内已经发送，请耐心等待"},status=status.HTTP_400_BAD_REQUEST)
         
         #2.. 生成短信验证码
-        sms_code = "06%d" % random.randint(100000,999999)
+        sms_code = "%06d" % random.randint(100000,999999)
 
         #3. 保存验证码到redis
         redis_conn.setex("sms_%s" % mobile, constants.SMS_EXPIRE_TIME, sms_code)
@@ -47,8 +49,11 @@ class SMSAPIView(APIView):
         try:
             ccp = CCP()
             ret = ccp.send_template_sms(mobile, [sms_code, constants.SMS_EXPIRE_TIME//60], constants.SMS_TEMPLATE_ID)
+            if not ret:
+                log.error("用户注册短信发送失败！手机号：%s" % mobile)
+                return Response({"message" : "发送短信失败"},status=status.HTTP_500_BAD_REQUEST)
         except:
-            return Response({"message" : "发送短信失败"})
+            return Response({"message" : "发送短信失败"},status=status.HTTP_500_BAD_REQUEST)
 
         #5. 相应发送短信的结果
         return  Response({"message" : "发送短信成功"})

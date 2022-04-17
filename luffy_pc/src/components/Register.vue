@@ -7,7 +7,10 @@
 				<div class="inp">
 					<input v-model = "mobile" type="text" placeholder="手机号码" class="user" @blur="checkMobile">
                     <input v-model = "password" type="password" placeholder="登录密码" class="user">
-					<input v-model = "sms_code" type="text" placeholder="输入验证码" class="user">
+					<div class="sms-box">
+                        <input v-model = "sms_code" maxlength="8" type="text" placeholder="短信验证码" class="user">
+                        <div class="sms-btn" @click="smsHander">{{sms_text}}</div>
+                    </div>
 					<button class="register_btn" @click="registerHandler">注册</button>
 					<p class="go_login" >已有账号 <router-link to="/user/login">直接登录</router-link></p>
 				</div>
@@ -25,6 +28,8 @@ export default {
         mobile:"",
         validateResult:false,
         password:"",
+        is_send_sms: false,
+        sms_text:"发送验证码",
     }
   },
   created(){
@@ -67,6 +72,39 @@ export default {
             }
             this.$message.error(message)
         })
+      },
+      smsHander(){
+          // 发送短信
+          // 1. 检测手机格式
+          if(! /1[3-9]\d{9}/.test(this.mobile)){
+              this.$message.error("手机格式不正确！")
+              return false
+          }
+          // 2. 判断手机号码是否60s内发送
+            if(this.is_send_sms){
+                this.$message.error("当前手机号已经在60秒内发送验证码，请不要频繁操作！")
+                return false
+            }
+
+          // 3. 发送请求
+          this.$axios.get(`${this.$settings.HOST}/user/sms/${this.mobile}/`, {}).then(response=>{
+                console.log(response.data)
+                let interval_time = 60
+                this.is_send_sms = true
+                let timer = setInterval(()=>{
+                    if(interval_time <= 1){
+                        //停止倒计时，允许用户再次请求发送验证码
+                        clearInterval(timer)
+                        this.is_send_sms = false
+                        this.sms_text = "发送验证码"
+                    }else{
+                        this.sms_text = `${interval_time}秒后重新发送`
+                        interval_time--
+                    }
+                }, 1000)
+          }).catch(error=>{
+                this.$message.error(error.response.data.message)
+          })
       }
   },
 
@@ -226,5 +264,20 @@ export default {
 .inp .go_login span{
     color: #84cc39;
     cursor: pointer;
+}
+.sms-box{
+  position: relative;
+}
+.sms-box .sms-btn{
+  position: absolute;
+  font-size: 14px;
+  letter-spacing: 0.26px;
+  top: 10px;
+  right: 16px;
+  border-left: 1px solid #484848;
+  padding-left: 16px;
+  padding-bottom: 4px;
+  cursor: pointer;
+  background: #ffffff;
 }
 </style>
