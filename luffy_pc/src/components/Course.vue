@@ -6,8 +6,8 @@
       <div class="condition">
         <ul class="cate-list">
           <li class="title">课程分类:</li>
-          <li :class="filter.category == 0?'this':''" @click="filter.category=0">全部</li>
-          <li :class="filter.category == category.id?'this':''" @click="filter.category=category.id" v-for="category in category_list" :key="category.id">{{category.name}}</li>
+          <li :class="category == 0?'this':''" @click="category=0">全部</li>
+          <li :class="category == cat.id?'this':''" @click="category=cat.id" v-for="cat in category_list" :key="cat.id">{{cat.name}}</li>
         </ul>
 
         <div class="ordering">
@@ -61,10 +61,10 @@
       name: "Course",
       data(){
         return{
+          category: 0,
           course_list: [],
           category_list: [],
           filter:{
-              category: 0,
               type:0,
               orders:"desc", //desc表示降序，asc表示升序  
           }
@@ -77,6 +77,11 @@
       created(){
         this.get_course_category();
         this.get_course();
+      },
+      watch:{
+        category(){
+          this.get_course()
+        }
       },
       methods:{
           change_order_type(type){
@@ -108,8 +113,15 @@
               });
           },
           get_course(){
+            let filters={}
+            if(this.category>0){
+              filters.course_category = this.category
+              // console.log(this.category)
+            }
               // 获取课程信息
-              this.$axios.get(`${this.$settings.HOST}/course/`).then(response=>{
+              this.$axios.get(`${this.$settings.HOST}/course/`, {
+                params:filters
+              }).then(response=>{
                   this.course_list = response.data;
               }).catch(error=>{
                   console.log(error.response);
