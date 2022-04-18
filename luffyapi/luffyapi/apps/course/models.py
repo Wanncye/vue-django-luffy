@@ -26,7 +26,7 @@ class CourseCategory(BaseModel):
 # (8,8,1,0,'2019-08-13 07:25:00.621686','2019-08-13 07:25:00.621768','英语');
 
 
-# from ckeditor_uploader.fields import RichTextUploadingField
+from ckeditor_uploader.fields import RichTextUploadingField
 class Course(BaseModel):
     """
     专题课程
@@ -50,7 +50,7 @@ class Course(BaseModel):
     course_img = models.ImageField(upload_to="course", max_length=255, verbose_name="封面图片", blank=True, null=True)
     course_type = models.SmallIntegerField(choices=course_type,default=0, verbose_name="付费类型")
     # 使用这个字段的原因
-    brief = models.TextField(max_length=2048, verbose_name="详情介绍", null=True, blank=True)
+    brief = RichTextUploadingField(max_length=2048, verbose_name="详情介绍", null=True, blank=True)
     level = models.SmallIntegerField(choices=level_choices, default=1, verbose_name="难度等级")
     pub_date = models.DateField(verbose_name="发布日期", auto_now_add=True)
     period = models.IntegerField(verbose_name="建议学习周期(day)", default=7)
