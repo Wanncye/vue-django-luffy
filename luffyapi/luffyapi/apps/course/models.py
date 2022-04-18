@@ -70,6 +70,20 @@ class Course(BaseModel):
     def __str__(self):
         return "%s" % self.name
 
+    @property
+    def lesson_list(self):
+        """展示课程列表页中推荐的4个课时信息"""
+        data_list = []
+        lesson_list = CourseLesson.objects.filter(is_show=True, is_delete=False, course_id=self.id, is_show_list=True).all()
+        for lesson in lesson_list:
+            data_list.append({
+                "id" : lesson.id,
+                "name" : lesson.name,
+                "free_trail" : lesson.free_trail,
+            })
+        return data_list
+        # return CourseLesson.objects.filter(is_show=True, is_delete=False).all()
+
 # INSERT INTO `ly_course`
 # (`id`,`orders`,`is_show`,`is_delete`,`created_time`,`update_time`,`name`,`course_img`,`course_type`,`brief`,`level`,`pub_date`,`period`,`attachment_path`,`status`,`students`,`lessons`,`pub_lessons`,`price`,`course_category_id`,`teacher_id`)
 # VALUES
