@@ -77,6 +77,7 @@ class Course(BaseModel):
         lesson_list = CourseLesson.objects.filter(is_show=True, is_delete=False, course_id=self.id, is_show_list=True).all()
         for lesson in lesson_list:
             data_list.append({
+                "lesson" : lesson.lesson,
                 "id" : lesson.id,
                 "name" : lesson.name,
                 "free_trail" : lesson.free_trail,

@@ -34,10 +34,11 @@
             <h3><router-link :to="`/course/detail/${course.id}`">{{course.name}}</router-link> <span><img src="/static/image/avatar1.svg" alt="">{{course.students}}人已加入学习</span></h3>
             <p class="teather-info">{{course.teacher.name}} {{course.teacher.signature}} {{course.teacher.title}} <span>共{{course.lessons}}课时/{{course.lessons==course.pub_lessons?'更新完成':`已更新${course.pub_lessons}课时`}}</span></p>
             <ul class="lesson-list">
-              <li><span class="lesson-title">01 | 第1节：初识编码</span> <span class="free">免费</span></li>
+              <li :key="key" v-for="(lesson,key) in course.lesson_list"><span class="lesson-title">0{{key}} | 第{{lesson.lesson}}节：{{lesson.name}}</span> <span class="free" v-if="lesson.free_trail">免费</span></li>
+              <!-- <li><span class="lesson-title">01 | 第1节：初识编码</span> <span class="free">免费</span></li>
               <li><span class="lesson-title">01 | 第1节：初识编码初识编码</span> <span class="free">免费</span></li>
               <li><span class="lesson-title">01 | 第1节：初识编码</span> <span class="free">免费</span></li>
-              <li><span class="lesson-title">01 | 第1节：初识编码初识编码初识编码初识编码</span> <span class="free">免费</span></li>
+              <li><span class="lesson-title">01 | 第1节：初识编码初识编码初识编码初识编码</span> <span class="free">免费</span></li> -->
             </ul>
             <div class="pay-box">
               <span class="discount-type">限时免费</span>
