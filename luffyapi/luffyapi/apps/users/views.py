@@ -39,6 +39,7 @@ class SMSAPIView(APIView):
         
         #2.. 生成短信验证码
         sms_code = "%06d" % random.randint(100000,999999)
+        # sms_code = "以验证码的形式，向李老师说一声，早上好！"
 
         #3. 保存验证码到redis【使用事务把多条命令集中发送给redis，只要一条sql失败，回滚】
         pipe = redis_conn.pipeline()
