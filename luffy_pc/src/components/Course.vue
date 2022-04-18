@@ -13,9 +13,12 @@
         <div class="ordering">
           <ul>
             <li class="title">筛&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选: </li>
-            <li class="default this">默认</li>
-            <li class="hot this">人气</li>
-            <li class="price this">价格</li>
+            <!-- <li @click="filter.type=0" class="default" :class="filter.type==0?'this':''">默认</li>
+            <li @click="filter.type=1" class="hot" :class="filter.type==1?'this':''">人气</li>
+            <li @click="filter.type=2" class="price" :class="filter.type==2?'this':''">价格</li> -->
+            <li @click="change_order_type(0)" class="default" :class="change_order_class(0)">默认</li>
+            <li @click="change_order_type(1)" class="hot" :class="change_order_class(1)">人气</li>
+            <li @click="change_order_type(2)" class="price" :class="change_order_class(2)">价格</li>
           </ul>
           <p class="condition-result">共{{course_list.length}}个课程</p>
         </div>
@@ -61,6 +64,8 @@
           category_list: [],
           filter:{
               category: 0,
+              type:0,
+              orders:"desc", //desc表示降序，asc表示升序  
           }
         }
       },
@@ -73,9 +78,29 @@
         this.get_course();
       },
       methods:{
+          change_order_type(type){
+            if(this.filter.type === type && this.filter.orders === "desc"){
+              this.filter.orders = "asc"
+            }else if(this.filter.type === type && this.filter.orders === "asc"){
+              this.filter.orders = "desc"
+            }
+            this.filter.type = type
+
+          },
+          change_order_class(type){
+            //更改当前选中筛选条件的高亮方式
+            if(this.filter.type==type && this.filter.orders === "asc"){
+              return "this asc"
+            }else if(this.filter.type==type && this.filter.orders === "desc"){
+              return "this desc"
+            }else{
+              return ""
+            }
+            // return this.filter.type==type?'this':''
+          },
           get_course_category(){
               // 获取课程分类信息
-              this.$axios.get(`${this.$settings.Host}/course/category/`).then(response=>{
+              this.$axios.get(`${this.$settings.HOST}/course/category/`).then(response=>{
                   this.category_list = response.data;
               }).catch(error=>{
                   console.log(error.response);
@@ -83,7 +108,7 @@
           },
           get_course(){
               // 获取课程信息
-              this.$axios.get(`${this.$settings.Host}/course/`).then(response=>{
+              this.$axios.get(`${this.$settings.HOST}/course/`).then(response=>{
                   this.course_list = response.data;
               }).catch(error=>{
                   console.log(error.response);
@@ -188,8 +213,8 @@
   .course .ordering .price{
     position: relative;
   }
-  .course .ordering .price::before,
-  .course .ordering .price::after{
+  .course .ordering .this::before,
+  .course .ordering .this::after{
     cursor: pointer;
     content:"";
     display: block;
@@ -199,13 +224,21 @@
     position: absolute;
     right: 0;
   }
-  .course .ordering .price::before{
+  .course .ordering .this::before{
     border-bottom: 5px solid #aaa;
     margin-bottom: 2px;
     top: 2px;
   }
-  .course .ordering .price::after{
+  .course .ordering .this::after{
     border-top: 5px solid #aaa;
+    bottom: 2px;
+  }
+  .course .ordering .asc::before{
+    border-bottom: 5px solid #ffc210;
+    bottom: 2px;
+  }
+  .course .ordering .desc::after{
+    border-top: 5px solid #ffc210;
     bottom: 2px;
   }
   .course .course-item:hover{
