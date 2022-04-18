@@ -23,6 +23,11 @@ import 'element-ui/lib/theme-chalk/index.css';
 // 调用插件
 Vue.use(ElementUI);
 
+// vue-video-player 视频播放器
+require('video.js/dist/video-js.css');
+require('vue-video-player/src/custom-theme.css');
+import VideoPlayer from 'vue-video-player'
+Vue.use(VideoPlayer);
 
 /* eslint-disable no-new */
 new Vue({
