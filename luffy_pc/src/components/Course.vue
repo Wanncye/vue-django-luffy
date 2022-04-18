@@ -16,14 +16,23 @@
             <!-- <li @click="filter.type=0" class="default" :class="filter.type==0?'this':''">默认</li>
             <li @click="filter.type=1" class="hot" :class="filter.type==1?'this':''">人气</li>
             <li @click="filter.type=2" class="price" :class="filter.type==2?'this':''">价格</li> -->
-            <li @click="change_order_type(0)" class="default" :class="change_order_class(0)">默认</li>
-            <li @click="change_order_type(1)" class="hot" :class="change_order_class(1)">人气</li>
-            <li @click="change_order_type(2)" class="price" :class="change_order_class(2)">价格</li>
+            <li @click="change_order_type('id')" class="default" :class="change_order_class('id')">默认</li>
+            <li @click="change_order_type('students')" class="hot" :class="change_order_class('students')">人气</li>
+            <li @click="change_order_type('price')" class="price" :class="change_order_class('price')">价格</li>
           </ul>
           <p class="condition-result">共{{course_list.length}}个课程</p>
         </div>
 
       </div>
+      <el-pagination
+          background
+          layout="prev, pager, next, sizes, jumper"
+          :page-size="filter.size"
+          :page-sizes="[1, 2, 3, 5, 10]"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+          :total="total">
+      </el-pagination>
       <!-- 课程列表 -->
       <div class="course-list">
         <div class="course-item" v-for="course in course_list" :key="course.id">
@@ -50,6 +59,15 @@
         </div>
       </div>
     </div>
+    <el-pagination
+      background
+      layout="prev, pager, next, sizes, jumper"
+      :page-size="filter.size"
+      :page-sizes="[1, 2, 3, 5, 10]"
+      @current-change="handleCurrentChange"
+      @size-change="handleSizeChange"
+      :total="total">
+    </el-pagination>
     <Footer></Footer>
   </div>
 </template>
@@ -62,11 +80,14 @@
       data(){
         return{
           category: 0,
+          total: 0,
           course_list: [],
           category_list: [],
           filter:{
-              type:0,
-              orders:"desc", //desc表示降序，asc表示升序  
+              type:"id",
+              orders:"desc", //控制样式 desc表示降序，asc表示升序  
+              size:1,
+              page:1
           }
         }
       },
@@ -85,14 +106,17 @@
       },
       methods:{
           change_order_type(type){
-            if(this.filter.type === type && this.filter.orders === "desc"){
-              this.filter.orders = "asc"
-            }else if(this.filter.type === type && this.filter.orders === "asc"){
-              this.filter.orders = "desc"
+            // 更改升序或者降序
+            if( this.filter.type === type && this.filter.orders === "desc" ){
+                this.filter.orders="asc";
+            }else if( this.filter.type === type && this.filter.orders === "asc"){
+                this.filter.orders="desc";
             }
-            this.filter.type = type
-
-          },
+            // 更改排序方式
+            this.filter.type=type;
+            // 重新获取课程
+            this.get_course();
+        },
           change_order_class(type){
             //更改当前选中筛选条件的高亮方式
             if(this.filter.type==type && this.filter.orders === "asc"){
@@ -113,7 +137,15 @@
               });
           },
           get_course(){
-            let filters={}
+            let filters={
+                page: this.filter.page,
+                size: this.filter.size,
+            }
+            if(this.filter.orders=="asc"){
+              filters.ordering = '-'+this.filter.type
+            }else{
+              filters.ordering = this.filter.type
+            }
             if(this.category>0){
               filters.course_category = this.category
               // console.log(this.category)
@@ -122,11 +154,25 @@
               this.$axios.get(`${this.$settings.HOST}/course/`, {
                 params:filters
               }).then(response=>{
-                  this.course_list = response.data;
+                  this.course_list = response.data.results
+                  this.total = response.data.count
               }).catch(error=>{
                   console.log(error.response);
               })
-          }
+          },
+          handleCurrentChange(page){
+              // 切换页码时，重新获取课程
+              console.log("本次点击的页码是:", page);
+              this.filter.page = page;
+              this.get_course();
+          },
+          handleSizeChange(size){
+              // 切换单页显示的数据量
+              this.filter.size = size;
+              // 重置页码
+              this.filter.page = 1;
+              this.get_course();
+          },
       }
   }
 </script>
@@ -405,5 +451,10 @@
     color: #fff;
     background: #ffc210;
     border: 1px solid #ffc210;
+  }
+  .el-pagination{
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 50px;
   }
 </style>
