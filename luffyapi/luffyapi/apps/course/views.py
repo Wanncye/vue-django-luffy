@@ -44,3 +44,8 @@ class CourseListAPIView(ListAPIView):
     ordering_fields = ('id', 'students', 'price', )
     pagination_class = CoursePageNumberPagination
 
+from rest_framework.generics import RetrieveAPIView
+from .serializers import CourseRetrieveModelSerializer
+class CourseRetrieveAPIView(RetrieveAPIView):
+    queryset = Course.objects.filter(is_show=True, is_delete=False).order_by("orders","-id")
+    serializer_class = CourseRetrieveModelSerializer

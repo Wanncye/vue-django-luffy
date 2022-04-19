@@ -174,7 +174,6 @@ export default {
                 },1000)
               }
           }).catch(error=>{
-            console.log("get_course_info-----------")
               this.$messge.error(error.response.data);
           })
       },

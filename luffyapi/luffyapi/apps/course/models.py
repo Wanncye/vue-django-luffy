@@ -1,5 +1,6 @@
 from django.db import models
 from luffyapi.utils.models import BaseModel
+from luffyapi.settings import constants
 
 # Create your models here.
 class CourseCategory(BaseModel):
@@ -48,6 +49,7 @@ class Course(BaseModel):
     )
     name = models.CharField(max_length=128, verbose_name="课程名称")
     course_img = models.ImageField(upload_to="course", max_length=255, verbose_name="封面图片", blank=True, null=True)
+    course_video = models.FileField(upload_to="video", null=True,blank=True, verbose_name="封面视频")
     course_type = models.SmallIntegerField(choices=course_type,default=0, verbose_name="付费类型")
     # 使用这个字段的原因
     brief = RichTextUploadingField(max_length=2048, verbose_name="详情介绍", null=True, blank=True)
@@ -84,6 +86,16 @@ class Course(BaseModel):
             })
         return data_list
         # return CourseLesson.objects.filter(is_show=True, is_delete=False).all()
+
+    @property
+    def level_name(self):
+        return self.level_choices[self.level][1]
+    
+    @property
+    def brief_html(self):
+        """把详情介绍中的图片地址拼上域名"""
+        html = self.brief.replace('src="/media','src="%s/media' % constants.SERVER_IMAGE_DOMAIN)
+        return html
 
 # INSERT INTO `ly_course`
 # (`id`,`orders`,`is_show`,`is_delete`,`created_time`,`update_time`,`name`,`course_img`,`course_type`,`brief`,`level`,`pub_date`,`period`,`attachment_path`,`status`,`students`,`lessons`,`pub_lessons`,`price`,`course_category_id`,`teacher_id`)
