@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'home',
     'users',
     'course',
+    'cart',
 
     'ckeditor',  # 富文本编辑器
     'ckeditor_uploader',  # 富文本编辑器上传图片模块
@@ -148,7 +149,15 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
-    }
+    },
+    # 提供存储购物车商品信息
+    "cart": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/3",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
 }
 
 # 设置xadmin用户登录时,登录信息session保存到redis
