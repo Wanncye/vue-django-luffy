@@ -49,3 +49,11 @@ from .serializers import CourseRetrieveModelSerializer
 class CourseRetrieveAPIView(RetrieveAPIView):
     queryset = Course.objects.filter(is_show=True, is_delete=False).order_by("orders","-id")
     serializer_class = CourseRetrieveModelSerializer
+
+from .models import CourseChapter
+from .serializers import CourseChapterModelSerializer
+class CourseChapterListAPIView(ListAPIView):
+    queryset = CourseChapter.objects.filter(is_show=True, is_delete=False).order_by("orders","id")
+    serializer_class = CourseChapterModelSerializer
+    filter_backends = [DjangoFilterBackend]
+    filter_fields = ['course']

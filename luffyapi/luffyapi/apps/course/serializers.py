@@ -38,3 +38,19 @@ class CourseRetrieveModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ["id","name","students","lessons","pub_lessons","price","course_img","teacher","level_name","brief_html","course_video"]
+
+
+from .models import CourseChapter,CourseLesson
+class CourseLessonModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CourseLesson
+        fields = ["id","lesson","name","free_trail"]
+
+class CourseChapterModelSerializer(serializers.ModelSerializer):
+    """
+    详情页课程章节列表
+    """
+    coursesections = CourseLessonModelSerializer(many=True)
+    class Meta:
+        model = CourseChapter
+        fields = ["id","chapter","name","coursesections"]

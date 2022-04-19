@@ -53,7 +53,8 @@
                 <p class="chapter-length">共{{chapter_list.length}}章 {{course.lessons}}个课时</p>
               </div>
               <div class="chapter-item" :key="key" v-for="chapter,key in chapter_list">
-                <p class="chapter-title"><img src="/static/image/1.svg" alt="">第{{chapter.chapter}}章·{{chapter.name}}</p>
+                <!-- <p class="chapter-title"><img src="/static/image/1.svg" alt="">第{{chapter.chapter}}章·{{chapter.name}}</p> -->
+                <p class="chapter-title">第{{chapter.chapter}}章·{{chapter.name}}</p>
                 <ul class="lesson-list">
                   <li class="lesson-item" :key="key" v-for="lesson,key in chapter.coursesections">
                     <p class="name"><span class="index">{{chapter.chapter}}-{{lesson.lesson}}</span> {{lesson.name}}<span class="free" v-if="lesson.free_trail">免费</span></p>
