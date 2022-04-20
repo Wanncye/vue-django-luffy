@@ -1,6 +1,7 @@
 from django.db import models
 from luffyapi.utils.models import BaseModel
 from luffyapi.settings import constants
+from datetime import datetime
 
 # Create your models here.
 class CourseCategory(BaseModel):
@@ -96,6 +97,73 @@ class Course(BaseModel):
         """把详情介绍中的图片地址拼上域名"""
         html = self.brief.replace('src="/media','src="%s/media' % constants.SERVER_IMAGE_DOMAIN)
         return html
+    
+    # @property
+    # def activity_time(self):
+    #     """计算活动剩余时间"""
+    #     time = 0
+    #     active_list = self.active_list()
+    #     if len(active_list) > 0:
+    #         active = active_list[0]
+    #         now_time = datetime.now().timestamp()
+    #         end_time = active.active.end_time.timestamp()
+    #         time = end_time - now_time
+    #     return int(time)
+
+    # @property
+    # def discount_name(self):
+    #     """如果商品有参与了活动，则返回折扣类型"""
+    #     name = ""
+    #     # 获取当前课程参与的所有活动
+    #     active_list = self.active_list()
+    #     if len(active_list) > 0:
+    #         """当前课程如果有参与到1个以上活动时才有优惠类型"""
+    #         active =active_list[0]
+    #         name = active.discount.discount_type.name
+    #     return name
+
+    # def active_list(self):
+    #     """获取当前课程参与的活动"""
+    #     return self.activeprices.filter(is_show=True, is_deleted=False, active__start_time__lte=datetime.now(),
+    #                                            active__end_time__gte=datetime.now()).order_by("-orders", "-id")
+
+    # def real_price(self):
+    #     """课程的真实价格"""
+    #     # 默认真实为原价
+    #     price = self.price
+
+    #     active_list = self.active_list()
+    #     if len(active_list) > 0:
+    #         """如果当前课程有参与了活动"""
+    #         active = active_list[0]
+    #         # 参与活动的价格门槛
+    #         condition = active.discount.condition
+    #         sale = active.discount.sale
+    #         self.price = float(self.price)
+    #         if self.price >= condition:
+    #             """只有原价满足价格门槛才进行优惠计算"""
+    #             if sale == "":
+    #                 """限时免费"""
+    #                 price = 0
+    #             elif sale[0] == "*":
+    #                 """限时折扣"""
+    #                 price = self.price * float(sale[1:])
+    #             elif sale[0] == "-":
+    #                 """限时减免"""
+    #                 price = self.price - float(sale[1:])
+    #             elif sale[0] == "满":
+    #                 """满减"""
+    #                 sale_list = sale.split("\r\n")
+    #                 price_list = [] # 设置一个列表，把当前课程原价满足的满减条件全部保存进去
+    #                 # 把满减的每一个选项在循环中，提取条件价格和课程原价进行判断
+    #                 for sale_item in sale_list:
+    #                     item = sale_item[1:]
+    #                     condition_price,condition_sale = item.split("-")
+    #                     if self.price >= float(condition_price):
+    #                         price_list.append(float(condition_sale) )
+
+    #                 price = self.price - max(price_list) # 课程原价 - 最大优惠
+    #     return "%.2f" % price
 
 # INSERT INTO `ly_course`
 # (`id`,`orders`,`is_show`,`is_delete`,`created_time`,`update_time`,`name`,`course_img`,`course_type`,`brief`,`level`,`pub_date`,`period`,`attachment_path`,`status`,`students`,`lessons`,`pub_lessons`,`price`,`course_category_id`,`teacher_id`)

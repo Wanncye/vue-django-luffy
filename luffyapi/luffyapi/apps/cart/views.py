@@ -61,8 +61,10 @@ class CartAPIView(ViewSet):
             course_id = course_id_bytes.decode()
             expire_id = expire_id_bytes.decode()
             try:
-                course = Course.objects.get(is_show=True, is_deleted=False, pk=course_id)
+                course = Course.objects.get(is_show=True, is_delete=False, pk=course_id)
+                # print(course)
             except Course.DoesNotExist:
+                # print("-------")
                 continue
             data.append({
                 "selected": True if course_id_bytes in selected_bytes_list else False,
@@ -70,7 +72,8 @@ class CartAPIView(ViewSet):
                 "name": course.name,
                 "id": course.id,
                 "expire_id": expire_id,
-                "price": course.real_price(),
+                # "price": course.real_price(),
+                "price": course.price,
             })
         return Response(data)
 
@@ -80,7 +83,7 @@ class CartAPIView(ViewSet):
         selected = request.data.get("selected")
         course_id = request.data.get("course_id")
         try:
-            Course.objects.get(is_show=True, is_deleted=False, id=course_id)
+            Course.objects.get(is_show=True, is_delete=False, id=course_id)
         except Course.DoesNotExist:
             return Response({"message":"参数有误！当前商品课程不存在！"}, status=status.HTTP_400_BAD_REQUEST)
 

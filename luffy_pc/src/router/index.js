@@ -36,14 +36,12 @@ export default new Router({
       path: '/courses',
       name: 'Course',
       component: Course
-    }
-    ,
+    },
     {
       path: '/courses/detail/:id', //:id，路由传参
       name: 'Detail',
       component: Detail
-    }
-    ,
+    },
     {
       path: '/cart', 
       name: 'Cart',

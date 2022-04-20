@@ -6,7 +6,7 @@ logger = logging.getLogger("django")
 from rest_framework import status
 from redis import RedisError
 
-def custom_exception_handler(exc, context):
+def custom_exception_handle(exc, context):
     """
     自定义异常处理
     :param exc:  本次请求发生的异常信息
