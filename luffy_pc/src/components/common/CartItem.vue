@@ -15,7 +15,7 @@
           <el-option label="永久有效" value="0" key="0"></el-option>
         </el-select>
       </div>
-      <div class="cart_column column_4">¥{{course.price}}</div>
+      <div class="cart_column column_4">¥{{course.price.toFixed(2)}}</div>
       <div class="cart_column column_4">删除</div>
     </div>
 </template>

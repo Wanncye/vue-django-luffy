@@ -28,7 +28,7 @@
           background
           layout="prev, pager, next, sizes, jumper"
           :page-size="filter.size"
-          :page-sizes="[1, 2, 3, 5, 10]"
+          :page-sizes="[2, 5, 10]"
           @current-change="handleCurrentChange"
           @size-change="handleSizeChange"
           :total="total">
@@ -49,10 +49,16 @@
               <li><span class="lesson-title">01 | 第1节：初识编码</span> <span class="free">免费</span></li>
               <li><span class="lesson-title">01 | 第1节：初识编码初识编码初识编码初识编码</span> <span class="free">免费</span></li> -->
             </ul>
-            <div class="pay-box">
+            <!-- <div class="pay-box">
               <span class="discount-type">限时免费</span>
               <span class="discount-price">￥0.00元</span>
               <span class="original-price">原价：{{course.price}}元</span>
+              <span class="buy-now">立即购买</span>
+            </div> -->
+            <div class="pay-box">
+              <span class="discount-type" v-if="course.discount_name">{{course.discount_name}}</span>
+              <span class="discount-price">￥{{course.real_price}}元</span>
+              <span class="original-price" v-if="course.discount_name">原价：{{course.price}}元</span>
               <span class="buy-now">立即购买</span>
             </div>
           </div>
@@ -63,7 +69,7 @@
       background
       layout="prev, pager, next, sizes, jumper"
       :page-size="filter.size"
-      :page-sizes="[1, 2, 3, 5, 10]"
+      :page-sizes="[2, 5, 10]"
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
       :total="total">
@@ -86,7 +92,7 @@
           filter:{
               type:"id",
               orders:"desc", //控制样式 desc表示降序，asc表示升序  
-              size:1,
+              size:4,
               page:1
           }
         }

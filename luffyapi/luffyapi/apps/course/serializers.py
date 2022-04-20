@@ -28,7 +28,7 @@ class CourseModelSerializer(serializers.ModelSerializer):
     teacher = TeacherModelSerializer()
     class Meta:
         model = Course
-        fields = ["id","name","students","lessons","pub_lessons","price","course_img","teacher","lesson_list"]
+        fields = ["id","name","students","lessons","pub_lessons","price","course_img","teacher","lesson_list", "discount_name", "real_price"]
 
 class CourseRetrieveModelSerializer(serializers.ModelSerializer):
     """

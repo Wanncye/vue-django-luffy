@@ -34,3 +34,29 @@ class CourseLessonModelAdmin(object):
     """课程课时模型管理类"""
     pass
 xadmin.site.register(CourseLesson, CourseLessonModelAdmin)
+
+from .models import CourseDiscountType
+class CourseDiscountTypeModelAdmin(object):
+    """价格优惠类型"""
+    pass
+xadmin.site.register(CourseDiscountType, CourseDiscountTypeModelAdmin)
+
+
+from .models import CourseDiscount
+class CourseDiscountModelAdmin(object):
+    """价格优惠公式"""
+    pass
+xadmin.site.register(CourseDiscount, CourseDiscountModelAdmin)
+
+from .models import CoursePriceDiscount
+class CoursePriceDiscountModelAdmin(object):
+    """价格优惠公式"""
+    pass
+xadmin.site.register(CoursePriceDiscount, CoursePriceDiscountModelAdmin)
+
+
+from .models import Activity
+class ActivityModelAdmin(object):
+    """商品活动模型"""
+    pass
+xadmin.site.register(Activity, ActivityModelAdmin)
