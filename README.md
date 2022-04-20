@@ -1,6 +1,5 @@
 # 依赖安装
-具体的环境配置键[总体环境配置](https://blog.csdn.net/weixin_42065178/article/details/124162072)，一些开发过程中额外使用的包，安装方法以及对应讲解如下：
-
+具体的环境配置键[总体环境配置](https://blog.csdn.net/weixin_42065178/article/details/124162072)，一些开发过程中额外使用的包，安装方法以及对应讲解如下：  
 前端：
 - [element-ui](https://blog.csdn.net/weixin_42065178/article/details/124162072)
 npm install element-ui 
@@ -10,7 +9,7 @@ npm install vuex
 
 - [视频播放器](https://blog.csdn.net/weixin_42065178/article/details/124261404)
 npm install vue-video-player
-
+------
 后端：
 - [富文本编辑器](https://blog.csdn.net/weixin_42065178/article/details/124259501)
 pip install ckeditor
@@ -32,16 +31,23 @@ pip install django-redis
 
 - [异步celery](https://blog.csdn.net/weixin_42065178/article/details/124231326)
 pip install celery
-
+------
 # 项目运行
 **前端**：
 - 在/luffy_pc目录下，使用
 > npm run dev
-
+------
 **后端**：
-- 在/luffyapi目录下，使用
-> python manage.py runserver
+1. 数据迁移，在/luffyapi目录下，使用
+> python manage.py makemigrations  
+> python manage.py migrate   
 
+2. 在/luffyapi目录下，创建超级用户，可登录xadmin
+> python manage.py createsuperuser
+
+3. 在/luffyapi目录下，运行项目
+> python manage.py runserver
+------
 # 专栏分析地址
 [https://blog.csdn.net/weixin_42065178/category_11755816.html](https://blog.csdn.net/weixin_42065178/category_11755816.html)
 ，如有不正确的地方，欢迎讨论。
