@@ -37,7 +37,7 @@ class CourseRetrieveModelSerializer(serializers.ModelSerializer):
     teacher = TeacherModelSerializer()
     class Meta:
         model = Course
-        fields = ["id","name","students","lessons","pub_lessons","price","course_img","teacher","level_name","brief_html","course_video"]
+        fields = ["id","name","students","lessons","pub_lessons","price","course_img","teacher","level_name","brief_html","course_video", "activity_time", "discount_name", "real_price"]
 
 
 from .models import CourseChapter,CourseLesson

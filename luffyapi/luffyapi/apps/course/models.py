@@ -98,17 +98,17 @@ class Course(BaseModel):
         html = self.brief.replace('src="/media','src="%s/media' % constants.SERVER_IMAGE_DOMAIN)
         return html
     
-    # @property
-    # def activity_time(self):
-    #     """计算活动剩余时间"""
-    #     time = 0
-    #     active_list = self.active_list()
-    #     if len(active_list) > 0:
-    #         active = active_list[0]
-    #         now_time = datetime.now().timestamp()
-    #         end_time = active.active.end_time.timestamp()
-    #         time = end_time - now_time
-    #     return int(time)
+    @property
+    def activity_time(self):
+        """计算活动剩余时间"""
+        time = 0
+        active_list = self.active_list()
+        if len(active_list) > 0:
+            active = active_list[0]
+            now_time = datetime.now().timestamp()
+            end_time = active.active.end_time.timestamp()
+            time = end_time - now_time
+        return int(time)
 
     @property
     def discount_name(self):

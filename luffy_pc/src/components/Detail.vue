@@ -127,6 +127,10 @@ export default {
       }
     },
     filters:{
+    //  在Vue中filter过滤器是一个非常强大的功能。
+    //  个人觉得称它为加工车间会更加贴切一些。
+    //  过滤器可以用来筛选出符合条件的，丢弃不符合条件的；
+    //  加工车间既可以筛选，又可以对筛选出来的进行加工。
       time_format(time){
           time = parseInt(time);
           if(time < 10){
@@ -168,7 +172,7 @@ export default {
               if(this.course.activity_time > 0){
                 let timer = setInterval(()=>{
                     if( this.course.activity_time > 1 ){
-                        this.course.activity_time-=1;
+                        this.course.activity_time-=1
                     }else{
                         clearInterval(timer);
                     }
