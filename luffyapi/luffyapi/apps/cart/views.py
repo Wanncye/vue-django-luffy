@@ -74,6 +74,7 @@ class CartAPIView(ViewSet):
                 "expire_id": expire_id,
                 # "price": course.real_price(),
                 "price": course.price,
+                "expire_list": course.expire_list,
             })
         return Response(data)
 

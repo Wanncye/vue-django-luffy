@@ -60,3 +60,9 @@ class ActivityModelAdmin(object):
     """商品活动模型"""
     pass
 xadmin.site.register(Activity, ActivityModelAdmin)
+
+from .models import CourseExpire
+class CourseExpireModelAdmin(object):
+    """商品有效期模型"""
+    pass
+xadmin.site.register(CourseExpire, CourseExpireModelAdmin)
