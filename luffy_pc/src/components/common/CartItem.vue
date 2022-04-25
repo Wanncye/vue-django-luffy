@@ -9,14 +9,11 @@
       </div>
       <div class="cart_column column_3">
         <el-select v-model="course.expire_id" size="mini" placeholder="请选择购买有效期" class="my_el_select">
-          <el-option label="1个月有效" value="30" key="30"></el-option>
-          <el-option label="2个月有效" value="60" key="60"></el-option>
-          <el-option label="3个月有效" value="90" key="90"></el-option>
-          <el-option label="永久有效" value="0" key="0"></el-option>
+          <el-option v-for="item in course.expire_list" :label="item.expire_text" :value="item.id" :key="item.id"></el-option>
         </el-select>
       </div>
-      <div class="cart_column column_4">¥{{course.price.toFixed(2)}}</div>
-      <div class="cart_column column_4">删除</div>
+      <div class="cart_column column_4">¥{{course.price}}</div>
+      <div class="cart_column column_4" @click="delete_course">删除</div>
     </div>
 </template>
 
@@ -26,15 +23,37 @@ export default {
     props:["course"],
     data(){
       return {
-        expire: "1个月有效",
+
       }
     },
     watch:{
         "course.selected": function(){
             this.change_selected();
+        },
+        "course.expire_id": function(){
+            this.change_expire();
         }
     },
     methods:{
+        change_expire(){
+            // 切换有效期
+            let token = localStorage.user_token || sessionStorage.user_token;
+            this.$axios.put(`${this.$settings.HOST}/cart/`,{
+                expire_id: this.course.expire_id,
+                course_id: this.course.id
+            },{
+                headers:{
+                    "Authorization": "jwt " + token,
+                }
+            }).then(response=>{
+                this.$message.success(response.data.message);
+                this.course.price = response.data.real_price;
+                // 当子组件中，切换了商品课程的有效期选项，则通知父组件重新计算购物商品总价
+                this.$emit("change_select");
+            }).catch(error=>{
+                this.$message.error(error.response);
+            })
+        },
         change_selected(){
             let token = localStorage.user_token || sessionStorage.user_token;
             // 切换商品课程的勾选状态
@@ -47,9 +66,30 @@ export default {
                 }
             }).then(response=>{
                 this.$message.success(response.data.message);
+                // 当子组件中，切换了商品课程的勾选状态，则通知父组件重新计算购物商品总价
+                this.$emit("change_select");
+
             }).catch(error=>{
                 this.$message.error(error.response);
-            })
+            });
+        },
+        delete_course(){
+            let token = localStorage.user_token || sessionStorage.user_token;
+            this.$axios.delete(`${this.$settings.HOST}/cart/`,{
+                params:{
+                    course_id: this.course.id
+                },
+                headers:{
+                    "Authorization": "jwt " + token,
+                }
+            }).then(response=>{
+                this.$message.success(response.data.message);
+                // 当子组件中，切换了商品课程的勾选状态，则通知父组件重新计算购物商品总价
+                this.$emit("delete_course");
+
+            }).catch(error=>{
+                this.$message.error(error.response);
+            });
         }
     }
 }

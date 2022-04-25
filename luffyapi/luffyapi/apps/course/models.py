@@ -132,12 +132,19 @@ class Course(BaseModel):
         # __lte 小于等于
         return self.activeprices.filter(is_show=True, is_delete=False, active__start_time__lte=datetime.now(),
                                                active__end_time__gte=datetime.now()).order_by("-orders", "-id")
-    @property
-    def real_price(self):
+    def real_price(self,expire_id=0):
         """课程的真实价格"""
-        # 默认真实为原价
-        price = self.price
-        
+        # 根据课程有效期，获取课程的原价
+        original_price = self.price
+        try:
+            if expire_id > 0:
+                original_price = CourseExpire.objects.get(id=expire_id).price
+        except CourseExpire.DoesNotExist:
+            pass
+
+        # 默认最终真实价格为原价
+        price = original_price
+
         active_list = self.active_list()
         if len(active_list) > 0:
             """如果当前课程有参与了活动"""
@@ -145,31 +152,31 @@ class Course(BaseModel):
             # 参与活动的价格门槛
             condition = active.discount.condition
             sale = active.discount.sale
-            self.price = float(self.price)
-            if self.price >= condition:
+            print(sale)
+            original_price = float(original_price)
+            if original_price >= condition:
                 """只有原价满足价格门槛才进行优惠计算"""
                 if sale == "":
                     """限时免费"""
                     price = 0
                 elif sale[0] == "*":
                     """限时折扣"""
-                    price = self.price * float(sale[1:])
+                    price = original_price * float(sale[1:])
                 elif sale[0] == "-":
                     """限时减免"""
-                    if self.price - float(sale[1:]) >= 0:
-                        price = self.price - float(sale[1:])
+                    price = original_price - float(sale[1:])
                 elif sale[0] == "满":
                     """满减"""
                     sale_list = sale.split("\r\n")
-                    price_list = [] # 设置一个列表，把当前课程原价满足的满减条件全部保存进去
+                    price_list = [0] # 设置一个列表，把当前课程原价满足的满减条件全部保存进去
                     # 把满减的每一个选项在循环中，提取条件价格和课程原价进行判断
                     for sale_item in sale_list:
                         item = sale_item[1:]
                         condition_price,condition_sale = item.split("-")
-                        if self.price >= float(condition_price):
+                        if original_price >= float(condition_price):
                             price_list.append(float(condition_sale) )
-                    if self.price - max(price_list) >= 0:
-                        price = self.price - max(price_list) # 课程原价 - 最大优惠
+
+                    price = original_price - max(price_list) # 课程原价 - 最大优惠
         return "%.2f" % price
 
     @property

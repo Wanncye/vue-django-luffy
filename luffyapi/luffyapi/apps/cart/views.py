@@ -4,6 +4,7 @@ from course.models import Course
 from rest_framework.response import Response
 from rest_framework import status
 from django_redis import get_redis_connection
+from course.models import CourseExpire
 from luffyapi.settings import constants
 import logging
 log = logging.getLogger("django")
@@ -58,8 +59,8 @@ class CartAPIView(ViewSet):
         # 使用循环从mysql中根据课程ID提取对应的商品信息[商品ID，商品封面图片，商品标题]
         data = []
         for course_id_bytes,expire_id_bytes in cart_bytes_dict.items():
-            course_id = course_id_bytes.decode()
-            expire_id = expire_id_bytes.decode()
+            course_id = int(course_id_bytes.decode())
+            expire_id = int(expire_id_bytes.decode())
             try:
                 course = Course.objects.get(is_show=True, is_delete=False, pk=course_id)
                 # print(course)
@@ -72,8 +73,8 @@ class CartAPIView(ViewSet):
                 "name": course.name,
                 "id": course.id,
                 "expire_id": expire_id,
-                # "price": course.real_price(),
-                "price": course.price,
+                "price": course.real_price(),
+                # "price": course.price,
                 "expire_list": course.expire_list,
             })
         return Response(data)
@@ -95,6 +96,31 @@ class CartAPIView(ViewSet):
             redis_conn.srem("selected_%s" % user_id, course_id)
 
         return Response({"message":"切换勾选状态成功！"})
+
+    def change_expire(self,request):
+        """切换购物车商品的勾选状态"""
+        user_id = request.user.id
+        expire_id = request.data.get("expire_id")
+        course_id = request.data.get("course_id")
+        try:
+            # 判断课程是否存在
+            course = Course.objects.get(is_show=True, is_delete=False, id=course_id)
+            # 判断课程的有效期选项是0还是其他的数值，如果是其他数值，还要判断是否存在于有效期选项表中
+            if expire_id > 0:
+                epxire_item = CourseExpire.objects.filter(is_show=True,is_delete=False,id=expire_id)
+                if not epxire_item:
+                    raise Course.DoesNotExist()
+        except Course.DoesNotExist:
+            return Response({"message":"参数有误！当前商品课程不存在或者不能存在的有效期！"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+        redis_conn = get_redis_connection("cart")
+        redis_conn.hset("cart_%s" % user_id, course_id, expire_id)
+
+        # 在切换有效期选项以后，重新获取真实价格
+        real_price = course.real_price(expire_id)
+
+        return Response({"message":"切换课程有效期成功！", "real_price": real_price})
 
 
 
