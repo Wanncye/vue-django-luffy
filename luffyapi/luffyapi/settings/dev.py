@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'course',
     'cart',
     'order',
+    'payments',
 
     'ckeditor',  # 富文本编辑器
     'ckeditor_uploader',  # 富文本编辑器上传图片模块
@@ -321,3 +322,20 @@ CKEDITOR_CONFIGS = {
     },
 }
 CKEDITOR_UPLOAD_PATH = ''  # 上传图片保存路径，留空则调用django的文件上传功能
+
+
+# 支付宝配置信息
+ALIAPY_CONFIG = {
+    # "gateway_url": "https://openapi.alipay.com/gateway.do?", # 真实支付宝网关地址
+    "gateway_url": "https://openapi.alipaydev.com/gateway.do?", # 沙箱支付宝网关地址
+    "appid": "2021000119676831",
+    "app_notify_url": None,
+    # "app_private_key_path": os.path.join(BASE_DIR, "apps/payments/keys/app_private_key.pem"),
+    "app_private_key_path": "-----BEGIN RSA PRIVATE KEY----- \n MIIEowIBAAKCAQEApaxiK5J6MhA7sihze0CQDWX53hFXmwh2PFjEXPRVEQj5vPWjauFMGYgD74S/iv/uCKFjDubQK0oZnvYDSZZ2gGywhIDzUT+JsLzPF4xcii2TCfZdnoXMnceAK46j0cXj7WkeG/ih6cv74IBPXBs9BGsNFDMrSzeRdRYQKmhI2ZDl0A07KflbmPcnCp2Ki2Yr9/hUcBIv6e7V5T2/qaU5ViK8OIV5GiJnEOLqeJ6bev0RZrBD7wOcfwDKRmWWRJim8fMJ0DuHklIMnLr583lusGdHP8Tv1uZUwoLRxAAKDag7y5MEEWUuCBCGDps05ZE2T/jiO3z806E+Db0bYqs+9wIDAQABAoIBABdBJhp1mf9S9f4g3WzMeCvZR4RbLM/PFUGNOCrQBOy6NMvIMuL6ssLWq67AFF6/Y7sEZDIgRdH9ubDtWTLIEuQd3X0L2Jtr7rjHF853XjnrAbuhQCzTHRB8g0oZ4Ha+byrQ2XAVqyx0/Grbt8f27s6i9BgEwqvxJdKogSZisu8OxMJjQoeBiPQ9imbiJwd1sVCDt/3Odod9F5pqN0rGqVM+ensocaguYXizOmxzrIYYO6/OhzmL9I5WkyDfYNkHyOtFpo7LPVHRodM5rE+CJE5ljO6hEgpAWl6aK7haRG98C0T8IDJtFwzm/mafzX+TqwtUG7JBCvLRTjXyacePPiECgYEA19fv4IXL1AvMDDtBcbb3gAYLtiN05wLkXotKzxx41KwJ+uxcm0WHovMn4K7F1gI8b7SQ6xBAya1dnJ1n9C6kHjj+6nehDTQoK10BqYgw21lX4+ey5c+R9lYT/rM/No04K/zOwI4LyUjKi9a423vlYD7iJxeTcvvUYbEPC0US8ccCgYEAxH75WHMHpCqAGtN2iX4reHu0jnMsQuuryf1d1uSrX+iF2lNz9GHrc8yPu5HaFHwnhZ13nsZZkinoYFoxQ5EU2FcI8X/K3qJuA/Sux6JJ//9uIxTkEx6q0Q2MZdl1BowVtRyfG1ce6UwkoTQfH+hC4BXX5GaZG09Dd7mVf1ltSVECgYAFNqsNok21Fn/cP8Yp6AB8cCjyQlL9jX1Up0qsTATDJlCrZfAqs/g9wF/TNoWC0NUC4bqqYt8dv/lF4itzo3jFXh0SLseOGRdrTLjQjoCXm8XatGsG0Ae3ioa7HTtGpwyXS2j3D7dLKl3yGMKoUorM01gFF7WxDlIn9e3mGMoHWwKBgAK2oijXhc59i8FTFDr31A/Y3XhuHLlb2cZzSj1ycO9lHZwTNPG1/HNf6sgzTmikAkO1FfbKVGhRTdUuyaleMoR+RzBWjG2gnpZNZbB6DD2NwG6ZlkCxVriGUF8DrrsFajNTDttoy5N7KrJTLu7Y3TuM8atEw25+HLdlh6v3hyvRAoGBALB3GpxK3LvV9GIZFryFi4NClGvAABcD4vbZ6xnd8WfHu5QhYzJYPeOnH0kA7MXsUjVUK1GxmakFASf2EzmtereL1FRtyABRP7xRz4PfuChHDZdqtHAKBSxAttriSJRhNH9jqUI1XBUq1087aFnFahaLdpP70pq8zz/RMWRLIfa+ \n -----END RSA PRIVATE KEY-----",
+    # "alipay_public_key_path": os.path.join(BASE_DIR, "apps/payments/keys/aliapy_public_key.pem"),
+    "alipay_public_key_path": "-----BEGIN PUBLIC KEY----- \n MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsZHsoaRqjEUcUOK5vw94v+RTfMHkUt0Z3Re31A0jR1jxpmaBcLV7im8FQTFVX04kFKc9qYTY2HQ8ouMEWYpkcsfdPId+GMH6BaZarK13BNlecvOhS8th6KOGjgHV2IiC48OkKMe1ojmPidhkYXCSUXptdGAkxfWaZi8q2m41DxjwH4IbYN1r/MTP1dwd4h+owoYmSjydpeV2JvL3AKuDYxAa3cXjYMxfeD5AgQ7j5OUwYeZ+S6bjjnyd3mtvQbQ3F09k/0TlqZFRiROdMIskUJKSpWPGnKucvwWqze8uDYSEMxCM0w0BYUbZuediz13nEcXGVShXDx9ircvbRFWX5QIDAQAB \n -----END PUBLIC KEY-----",
+    "sign_type": "RSA2",
+    "debug": True,
+    "return_url": "http://www.luffycity.cn:8080/payments/result", # 同步回调地址
+    "notify_url": "http://api.luffycity.cn:8000/payments/result", # 异步结果通知
+}

@@ -31,6 +31,9 @@ pip install django-redis
 
 - [异步celery](https://blog.csdn.net/weixin_42065178/article/details/124231326)
 pip install celery
+
+- [支付宝支付](https://blog.csdn.net/weixin_42065178/article/details/124406593)
+pip install python-alipay-sdk --upgrade
 ------
 # 项目运行
 **前端**：

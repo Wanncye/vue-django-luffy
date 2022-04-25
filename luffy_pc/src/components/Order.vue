@@ -212,7 +212,17 @@
               // 订单生成成功！
               this.$message.success("订单生成成功！即将跳转到支付页面，请不要眨眼！");
               // 发起支付[页面跳转,后端需要提供跳转地址]
-              
+              this.$axios.get(`${this.$settings.HOST}/payments/alipay/`,{
+                  params:{
+                      order_number: response.data.order_number,
+                  }
+              }).then(response=>{
+                  // 返回支付链接地址
+                  location.href=response.data;
+
+              }).catch(error=>{
+                  this.$message.error(error.response.data.message);
+              })
           }).catch(error=>{
               this.$message.error("订单生成失败！");
           })
