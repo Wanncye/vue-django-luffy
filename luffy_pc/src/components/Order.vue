@@ -67,7 +67,8 @@
                 <span class="alipay wechat" v-if="pay_type==1"><img src="../../static/image/wechat2.png" alt=""></span>
                 <span class="alipay wechat" @click="pay_type=1" v-else><img src="../../static/image/wechat.png" alt=""></span>
               </el-col>
-              <el-col :span="8" class="count">实付款： <span>¥{{(real_total - credit / credit_to_money ).toFixed(2)}}</span></el-col>
+              <!-- <el-col :span="8" class="count">实付款： <span>¥{{(real_total - credit / credit_to_money ).toFixed(2)}}</span></el-col> -->
+              <el-col :span="8" class="count">实付款： <span>¥{{(real_total).toFixed(2)}}</span></el-col>
               <el-col :span="4" class="cart-pay"><span @click="payHander">立即支付</span></el-col>
             </el-row>
         </div>
@@ -104,7 +105,7 @@
     created(){
       this.token = this.check_user_login();
       this.get_cart();
-      this.get_coupon();
+    //   this.get_coupon();
     },
     watch:{
         coupon(){

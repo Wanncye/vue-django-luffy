@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'users',
     'course',
     'cart',
+    'order',
 
     'ckeditor',  # 富文本编辑器
     'ckeditor_uploader',  # 富文本编辑器上传图片模块
