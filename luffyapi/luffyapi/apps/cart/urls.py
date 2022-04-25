@@ -7,6 +7,6 @@ urlpatterns = [
             "get":"list",
             "patch":"change_selected",
             "put":"change_expire",
-            # "delete":"del_cart",
+            "delete":"del_cart",
         }) ),
 ]

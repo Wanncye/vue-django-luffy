@@ -122,5 +122,23 @@ class CartAPIView(ViewSet):
 
         return Response({"message":"切换课程有效期成功！", "real_price": real_price})
 
+    def del_cart(self,request):
+        """从购物车中商品商品信息"""
+        user_id = request.user.id
+        course_id = request.query_params.get("course_id")
+        try:
+            Course.objects.get(is_show=True, is_delete=False, id=course_id)
+        except Course.DoesNotExist:
+            return Response({"message":"参数有误！当前商品课程不存在！"}, status=status.HTTP_400_BAD_REQUEST)
+
+        redis_conn = get_redis_connection("cart")
+        pipe = redis_conn.pipeline()
+        pipe.multi()
+        pipe.hdel('cart_%s' % user_id, course_id)
+        pipe.srem("selected_%s" % user_id, course_id)
+        pipe.execute()
+
+        return Response({"message":"删除商品成功！"})
+
 
 
