@@ -50,4 +50,4 @@ pip install celery
 ------
 # 专栏分析地址
 [https://blog.csdn.net/weixin_42065178/category_11755816.html](https://blog.csdn.net/weixin_42065178/category_11755816.html)
-，如有不正确的地方，欢迎讨论。
+，如有不正确的地方，欢迎讨论。代码阅读方式建议：可以去[https://github.com/Wanncye/vue-django-luffy/network](https://github.com/Wanncye/vue-django-luffy/network)commit网络图那里看进度，看一看每次提交都改了什么内容，以及commit的信息。

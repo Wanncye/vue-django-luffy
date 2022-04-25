@@ -16,13 +16,13 @@
           </div>
           <!-- 购物车中商品列表 -->
           <div class="cart_course_list">
-            <CartItem :key="key" v-for="(course,key) in course_list" :course="course"></CartItem>
+            <CartItem :key="key" v-for="(course,key) in course_list" @change_select="calc_total" :course="course" @delete_course="del_cart(key)"></CartItem>
           </div>
           <div class="cart_footer_row">
             <span class="cart_select"><label> <el-checkbox v-model="checked"></el-checkbox><span>全选</span></label></span>
             <span class="cart_delete"><i class="el-icon-delete"></i> <span>删除</span></span>
-            <span class="goto_pay">去结算</span>
-            <span class="cart_total">总计：¥0.0</span>
+            <span class="goto_pay"><router-link to="/order">去结算</router-link></span>
+            <span class="cart_total">总计：¥{{total_price.toFixed(2)}}</span>
           </div>
         </div>
       </div>
@@ -40,6 +40,7 @@ export default {
       return {
         token: "",
         course_list: [],
+        total_price: 0.00,
         checked: false,  // 全选的标志
       }
     },
@@ -48,6 +49,23 @@ export default {
       this.get_cart();
     },
     methods:{
+      calc_total(){
+        // 计算购物车勾选商品的总价格
+          /**
+             // 在javascript中，数组有一个默认的方法，forEach可以用于对数组进行便利
+             arr1 = ["a","b","c","d"]
+             arr1.forEach(function(value,key){
+                  console.log(`下标：${key}，值=${value}`);
+             });
+           */
+        let total = 0;
+        this.course_list.forEach((course,key)=>{
+          if(course.selected){
+            total += parseFloat( course.price );
+          }
+        });
+        this.total_price = total;
+      },
       get_cart(){
           // 获取购物车中的商品信息
           this.$axios.get(`${this.$settings.HOST}/cart/`,{
@@ -57,6 +75,8 @@ export default {
           }).then(response=>{
               this.course_list = response.data;
               this.$store.commit("add_cart", this.course_list.length);
+              // 统计勾选商品课程的真实价格
+              this.calc_total();
           }).catch(error=>{
               console.log(error.response);
           })
@@ -75,6 +95,12 @@ export default {
             return false; // 阻止js继续往下执行
         }
         return token;
+      },
+      del_cart(key){
+        // 从购物车中删除指定商品
+        this.course_list.splice(key,1);
+        // 删除商品课程以后，还要重新计算新的总价
+        this.calc_total();
       },
     },
     components:{
