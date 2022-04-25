@@ -145,7 +145,7 @@
               this.total_price = response.data.total_price;
               this.real_total = response.data.total_price;
           }).catch(error=>{
-              this.$message.error("对不起，当前购物车没有任何商品被勾选！");
+              this.$message.error("对不起，当前购物车没有任何商品被勾选！——cart");
           });
       },
       get_coupon(){
@@ -157,7 +157,7 @@
           }).then(response=>{
               this.coupon_list = response.data;
           }).catch(error=>{
-              this.$message.error("对不起，当前购物车没有任何商品被勾选！");
+              this.$message.error("对不起，当前购物车没有任何商品被勾选！——coupon");
           });
       },
       selected_coupon(key, user_coupon_id){
@@ -342,7 +342,7 @@
   text-align: right;
   height: 100%;
   line-height: 100%;
-  vertical-align: middle;
+  /* vertical-align: middle; */
   margin-top: 20px;
 }
 .course_name,.real_price,.original_price{
@@ -472,7 +472,7 @@
   font-size: 16px;
   color: #4a4a4a;
   display: inline-block;
-  float: right;
+  /* float: right; */
 }
 .sun-coupon-num span{
   font-size: 18px;

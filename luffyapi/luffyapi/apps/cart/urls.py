@@ -9,4 +9,5 @@ urlpatterns = [
             "put":"change_expire",
             "delete":"del_cart",
         }) ),
+    path(r"order/",views.CartAPIView.as_view({"get":"get_selected_course"}))
 ]
