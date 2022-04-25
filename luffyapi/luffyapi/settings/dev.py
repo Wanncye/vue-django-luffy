@@ -335,7 +335,7 @@ ALIAPY_CONFIG = {
     # "alipay_public_key_path": os.path.join(BASE_DIR, "apps/payments/keys/aliapy_public_key.pem"),
     "alipay_public_key_path": "-----BEGIN PUBLIC KEY----- \n MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsZHsoaRqjEUcUOK5vw94v+RTfMHkUt0Z3Re31A0jR1jxpmaBcLV7im8FQTFVX04kFKc9qYTY2HQ8ouMEWYpkcsfdPId+GMH6BaZarK13BNlecvOhS8th6KOGjgHV2IiC48OkKMe1ojmPidhkYXCSUXptdGAkxfWaZi8q2m41DxjwH4IbYN1r/MTP1dwd4h+owoYmSjydpeV2JvL3AKuDYxAa3cXjYMxfeD5AgQ7j5OUwYeZ+S6bjjnyd3mtvQbQ3F09k/0TlqZFRiROdMIskUJKSpWPGnKucvwWqze8uDYSEMxCM0w0BYUbZuediz13nEcXGVShXDx9ircvbRFWX5QIDAQAB \n -----END PUBLIC KEY-----",
     "sign_type": "RSA2",
-    "debug": True,
+    "debug": False,
     "return_url": "http://www.luffycity.cn:8080/payments/result", # 同步回调地址
     "notify_url": "http://api.luffycity.cn:8000/payments/result", # 异步结果通知
 }
