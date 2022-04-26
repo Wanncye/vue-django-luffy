@@ -34,6 +34,9 @@ pip install celery
 
 - [支付宝支付](https://blog.csdn.net/weixin_42065178/article/details/124406593)
 pip install python-alipay-sdk --upgrade
+
+- [uswgi](https://blog.csdn.net/weixin_42065178/article/details/124418986)
+pip install uswgi
 ------
 # 项目运行
 **前端**：
