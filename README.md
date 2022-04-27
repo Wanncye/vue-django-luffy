@@ -41,6 +41,7 @@ pip install uswgi
 # 项目运行
 **前端**：
 - 在/luffy_pc目录下，使用
+> npm install
 > npm run dev
 ------
 **后端**：
