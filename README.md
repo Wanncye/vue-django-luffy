@@ -38,6 +38,13 @@ pip install python-alipay-sdk --upgrade
 - [uswgi](https://blog.csdn.net/weixin_42065178/article/details/124418986)
 pip install uswgi
 ------
+# 数据库设计
+
+主要表设计如下，图由navicat生成：
+
+![图片](assert/dataset.jpg)
+
+---
 # 项目运行
 **前端**：
 - 在/luffy_pc目录下，使用
